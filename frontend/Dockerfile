@@ -13,5 +13,9 @@ RUN npm install
 # copy other project files
 COPY . .
 
+RUN chown -R node.node /frontend
+
+USER node
+
 # build the folder
 CMD [ "npm", "run", "start" ]

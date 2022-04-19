@@ -1,0 +1,9 @@
+.transactionInputs {
+    flex-direction: column;
+}
+
+@media (min-width: 1200px) {
+    .transactionInputs {
+        flex-direction: row;
+    }
+}

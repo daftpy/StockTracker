@@ -1,4 +1,5 @@
 import axios from 'axios';
+import './/styles/TransactionInput.css';
 
 function TransactionInput(props) {
   /*
@@ -8,9 +9,9 @@ function TransactionInput(props) {
   */
   const newHolding = {};
   const inputStyles = {
-    width: '100%',
     justifyContent : 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%'
   }
   const inputElements = document.getElementsByTagName('input');
 
@@ -56,8 +57,8 @@ function TransactionInput(props) {
   }
 
   return (
-    <div style={inputStyles} className="transactionInputs block is-flex">
-      <div>
+    <div style={inputStyles} className="transactionInputs block is-size-7 is-flex">
+      <div className="transactionInput block">
         <label><b>Ticker</b></label>
         <input
           className="input is-small"
@@ -66,7 +67,7 @@ function TransactionInput(props) {
           onChange={(e) => onChange(e, 'ticker')}
         />
       </div>
-      <div>
+      <div className="transactionInput block">
         <label><b>Shares Total</b></label>
         <input
           className="input is-small"
@@ -75,7 +76,7 @@ function TransactionInput(props) {
           onChange={(e) => onChange(e, 'stockTotal')}
         />
       </div>
-      <div>
+      <div className="transactionInput block">
         <label><b>Average Cost Per Share</b></label>
         <input
           className="input is-small"
@@ -84,7 +85,7 @@ function TransactionInput(props) {
           onChange={(e) => onChange(e, 'avgCost')}
         />
       </div>
-      <div>
+      <div className="transactionInput block">
         <label><b>Date</b></label>
         <input
           className="input is-small"
@@ -93,8 +94,12 @@ function TransactionInput(props) {
           onChange={(e) => onChange(e, 'transactionDate')}
         />
       </div>
-      <div className="control">
-        <label><b>Order Type</b></label>
+      <div className="control transactionInput block">
+        <label>
+          <span className="has-text-weight-bold is-size-7">
+            Order Type
+          </span>
+        </label>
         <div className="my-2">
         <label className="radio">
           <input
@@ -105,7 +110,7 @@ function TransactionInput(props) {
             id="TransactionInputBuy"
             onChange={(e) => onChange(e, 'orderType')}
           />
-            Buy
+            <span className="is-size-7">Buy</span>
         </label>
         <label className="radio">
           <input
@@ -116,13 +121,13 @@ function TransactionInput(props) {
             id="TransactionInputSell"
             onChange={(e) => onChange(e, 'orderType')}  
           />
-            Sell
+            <span className="is-size-7">Sell</span>
         </label>
         </div>
       </div>
-      <div>
+      <div className="transactionInput block">
         <button
-          className="button is-success"
+          className="button is-success is-rounded is-small"
           id="submit"
           onClick={(e) => handleClick(e)}
         >

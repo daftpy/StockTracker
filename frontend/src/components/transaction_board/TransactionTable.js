@@ -1,29 +1,42 @@
+import './/styles/TransactionTable.css';
+
 function TransactionRow (props) {
   const rowStyles = {
     display: 'inline-flex',
     width: '100%',
     justifyContent : 'space-between',
-    listStyleType: 'none'
+    listStyleType: 'none',
+    alignItems: 'center',
   }
   function onClick(e, id) {
     props.removeTransaction(id)
   }
   return (
-    <li className="transactionData" style={rowStyles}>
+    <li className="transactionData block p-3 is-size-7" style={rowStyles}>
       <span className="transactionTicker">
-        Ticker: {props.transaction['ticker']}
+        <span className="has-text-weight-bold">
+          Ticker:
+        </span> {props.transaction['ticker']}
       </span>
       <span className="transactionStockTotal">
-        Total: {props.transaction['stockTotal']}
+        <span className="has-text-weight-bold">
+          Total:
+        </span> {props.transaction['stockTotal']}
       </span>
       <span className="transactionAvgCost">
-        Avg Cost: {props.transaction['avgCost']}
+        <span className="has-text-weight-bold">
+          Avg Cost:
+        </span> {props.transaction['avgCost']}
       </span>
       <span className="transactionDate">
-        Transaction Date: {props.transaction['transactionDate']}
+        <span className="has-text-weight-bold">
+          Transaction Date:
+        </span> {props.transaction['transactionDate']}
       </span>
       <span className="transactionOrderType">
-        Order Type: {props.transaction['orderType']}
+        <span className="has-text-weight-bold">
+          Order Type:
+        </span> {props.transaction['orderType']}
       </span>
       <span>
         <button
@@ -41,8 +54,8 @@ function TransactionRow (props) {
 function TransactionTable(props) {
   return (
     <div className="block">
-      <h1 className="title">Transactions</h1>
-        <ul>
+      <h4 className="is-size-4">Transactions</h4>
+        <ul style={{marginLeft: '0'}}>
           {props.transactions.map((transaction, i) => {
             return (
               <TransactionRow
