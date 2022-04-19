@@ -6,6 +6,7 @@ function TransactionBoard(props) {
     <div>
       <TransactionTable
         transactions={props.transactions}
+        removeTransaction={props.removeTransaction}
       />
       <TransactionInput
         holdings={props.holdings}

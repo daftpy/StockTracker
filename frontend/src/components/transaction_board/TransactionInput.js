@@ -1,8 +1,9 @@
+import axios from 'axios';
+
 function TransactionInput(props) {
   /*
-    newHolding will hold the value of the inputElements.
-    When the user hits submit, the values are sent to the
-    python server, validated, saved, and returns a 
+    newHolding will hold the value of the inputElements. When the user hits submit, 
+    the values are sent to the python server, validated, saved, and returns a 
     validation response.
   */
   const newHolding = {};
@@ -19,13 +20,30 @@ function TransactionInput(props) {
     const holdings = Object.assign({}, props.holdings);
     const transactions = props.transactions.slice();
     /* 
-      Set the new holding and push it to the holdings array.
-      Update the holdings and transaction state.
+      Post the input to the transactions endpoint. If the post request is succesful,
+      add the new transaction to the cloned array and set the transactions state.
     */
+    axios.post(`http://localhost:8000/transactions/`, {
+      "ticker": newHolding['ticker'],
+      "stock_quantity": newHolding['stockTotal'],
+      "avg_cost": newHolding['avgCost'],
+      'trade_date': newHolding['transactionDate'],
+      'order_type': newHolding['orderType']
+    })
+      .then(res => {
+        transactions.push({
+          'id': res.data['id'],
+          'ticker': res.data['ticker'],
+          'stockTotal': res.data['stock_quantity'],
+          'avgCost': res.data['avg_cost'],
+          'transactionDate': res.data['trade_date'],
+          'orderType': res.data['order_type']
+        });
+        props.setTransactions(transactions);
+      })
+    /* Set the holdings data, wip */
     holdings[newHolding["ticker"]] = newHolding["stockTotal"];
-    transactions.push(newHolding);
     props.setHoldings(holdings);
-    props.setTransactions(transactions);
     /* Loop through the inputElements and reset their values */
     for (let i = 0; i < inputElements.length; i++) {
       inputElements[i].type === 'radio' ?
@@ -62,7 +80,7 @@ function TransactionInput(props) {
         <input
           className="input is-small"
           type="text"
-          id="TransactionInputStockTotal"
+          id="TransactionInputAvgCost"
           onChange={(e) => onChange(e, 'avgCost')}
         />
       </div>
@@ -71,7 +89,7 @@ function TransactionInput(props) {
         <input
           className="input is-small"
           type="date"
-          id="TransactionInputStockTotal"
+          id="TransactionInputTransactionDate"
           onChange={(e) => onChange(e, 'transactionDate')}
         />
       </div>
@@ -83,7 +101,8 @@ function TransactionInput(props) {
             type="radio"
             name="orderType"
             className="is-small mr-2"
-            value="buy"
+            value="BUY"
+            id="TransactionInputBuy"
             onChange={(e) => onChange(e, 'orderType')}
           />
             Buy
@@ -93,7 +112,8 @@ function TransactionInput(props) {
             type="radio"
             name="orderType"
             className="is-small mr-2"
-            value="sell"
+            value="SELL"
+            id="TransactionInputSell"
             onChange={(e) => onChange(e, 'orderType')}  
           />
             Sell
@@ -103,6 +123,7 @@ function TransactionInput(props) {
       <div>
         <button
           className="button is-success"
+          id="submit"
           onClick={(e) => handleClick(e)}
         >
           Add Holding
