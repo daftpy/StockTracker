@@ -42,9 +42,18 @@ function TransactionRow (props) {
         <button
           id="deleteTransaction"
           onClick={(e) => onClick(e, props.transaction['id'])}
-          className="button is-danger is-rounded is-small"
+          className="button transactionDeleteButton p-2 mr-1 is-danger is-rounded is-small"
+          style={{lineHeight: '9px', height: '2em'}}
         >
-          Delete
+          x
+        </button>
+        <button
+          id="deleteTransaction"
+          onClick={(e) => onClick(e, props.transaction['id'])}
+          className="button transactionEditButton p-2 ml-1 is-info is-rounded is-small"
+          style={{lineHeight: '9px', height: '2em'}}
+        >
+          e
         </button>
       </span>
     </li>
