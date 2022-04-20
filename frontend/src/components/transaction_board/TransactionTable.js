@@ -49,7 +49,7 @@ function TransactionRow (props) {
         </button>
         <button
           id="deleteTransaction"
-          onClick={(e) => onClick(e, props.transaction['id'])}
+          onClick={props.toggleModal}
           className="button transactionEditButton p-2 ml-1 is-info is-rounded is-small"
           style={{lineHeight: '9px', height: '2em'}}
         >
@@ -71,6 +71,7 @@ function TransactionTable(props) {
                 key={transaction['id']}
                 transaction={transaction}
                 removeTransaction={props.removeTransaction}
+                toggleModal={props.toggleModal}
               />
             )
           })}
