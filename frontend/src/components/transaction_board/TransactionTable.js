@@ -13,27 +13,27 @@ function TransactionRow (props) {
   }
   return (
     <li className="transactionData block p-3 is-size-7" style={rowStyles}>
-      <span className="transactionTicker">
+      <span className="transactionTicker px-3">
         <span className="has-text-weight-bold">
           Ticker:
         </span> {props.transaction['ticker']}
       </span>
-      <span className="transactionStockTotal">
+      <span className="transactionStockTotal px-3">
         <span className="has-text-weight-bold">
           Total:
         </span> {props.transaction['stockTotal']}
       </span>
-      <span className="transactionAvgCost">
+      <span className="transactionAvgCost px-3">
         <span className="has-text-weight-bold">
           Avg Cost:
         </span> {props.transaction['avgCost']}
       </span>
-      <span className="transactionDate">
+      <span className="transactionDate px-3">
         <span className="has-text-weight-bold">
           Transaction Date:
         </span> {props.transaction['transactionDate']}
       </span>
-      <span className="transactionOrderType">
+      <span className="transactionOrderType px-3">
         <span className="has-text-weight-bold">
           Order Type:
         </span> {props.transaction['orderType']}
@@ -42,7 +42,7 @@ function TransactionRow (props) {
         <button
           id="deleteTransaction"
           onClick={(e) => onClick(e, props.transaction['id'])}
-          className="button transactionDeleteButton p-2 mr-1 is-danger is-rounded is-small"
+          className="button transactionDeleteButton p-2 m-1 is-danger is-rounded is-small"
           style={{lineHeight: '9px', height: '2em'}}
         >
           x
@@ -50,7 +50,7 @@ function TransactionRow (props) {
         <button
           id="deleteTransaction"
           onClick={props.toggleModal}
-          className="button transactionEditButton p-2 ml-1 is-info is-rounded is-small"
+          className="button transactionEditButton p-2 m-1 is-info is-rounded is-small"
           style={{lineHeight: '9px', height: '2em'}}
         >
           e

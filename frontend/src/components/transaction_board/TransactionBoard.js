@@ -2,31 +2,23 @@ import { useEffect, useState } from 'react';
 
 import TransactionTable from './TransactionTable';
 import TransactionInput from './TransactionInput';
+import EditModalWrapper from '../edit_transaction_modal/EditModalWrapper';
 
 function TransactionBoard(props) {
   const [modalVisibility, setVisibility] = useState(false);
-  const editModal = document.querySelector("#editTransactionModal");
+
   function toggleModal() {
-    setVisibility(!modalVisibility)
-    modalVisibility ? editModal.classList.add('is-active') : editModal.classList.remove('is-active');
+    setVisibility(!modalVisibility);
   }
+
   return (
     <div>
-      <div id="editTransactionModal" className="modal">
-        <div className="modal-background"></div>
-
-        <div className="modal-content">
-          <div className="box">
-            <h5 className="is-size-5">Edit Transaction</h5>
-            <TransactionInput />
-          </div>
-        </div>
-          <button className="modal-close is-large" onClick={toggleModal} aria-label="close"></button>
-      </div>
+      <EditModalWrapper visibility={modalVisibility} toggleModal={toggleModal} />
       <TransactionTable
         transactions={props.transactions}
         removeTransaction={props.removeTransaction}
         toggleModal={toggleModal}
+        modalVisibility={modalVisibility}
       />
       <TransactionInput
         holdings={props.holdings}
