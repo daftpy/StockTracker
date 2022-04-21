@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useState } from 'react';
 import './/styles/TransactionInput.css';
 
 function TransactionInput(props) {
@@ -7,6 +8,7 @@ function TransactionInput(props) {
     the values are sent to the python server, validated, saved, and returns a 
     validation response.
   */
+  const [inputErrors, setErrors] = useState({});
   const newHolding = {};
   const inputStyles = {
     justifyContent : 'space-between',
@@ -31,7 +33,8 @@ function TransactionInput(props) {
       'trade_date': newHolding['transactionDate'],
       'order_type': newHolding['orderType']
     })
-      .then(res => {
+    .then(res => {
+      if (res.status === 201) {
         transactions.push({
           'id': res.data['id'],
           'ticker': res.data['ticker'],
@@ -41,7 +44,14 @@ function TransactionInput(props) {
           'orderType': res.data['order_type']
         });
         props.setTransactions(transactions);
-      })
+        setErrors({});
+      }
+    })
+    .catch((error) => {
+      console.log(error.response.data)
+      error.response.data ? setErrors(error.response.data) : console.log('unexpected');
+    })
+    
     /* Set the holdings data, wip */
     holdings[newHolding["ticker"]] = newHolding["stockTotal"];
     props.setHoldings(holdings);
@@ -57,82 +67,95 @@ function TransactionInput(props) {
   }
 
   return (
-    <div style={inputStyles} className="transactionInputs block is-size-7 is-flex">
-      <div className="transactionInput block">
-        <label><b>Ticker</b></label>
-        <input
-          className="input is-small"
-          type="text"
-          id="TransactionInputTicker"
-          onChange={(e) => onChange(e, 'ticker')}
-        />
+    <div>
+      <div
+        className="inputErrors block"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          flexWrap: 'wrap'
+        }}>
+        {Object.keys(inputErrors).map(function(key) {
+          return <span className="tag is-danger is-rounded is-size-7 my-1">{key} {inputErrors[key]}</span> 
+        })}
       </div>
-      <div className="transactionInput block">
-        <label><b>Shares Total</b></label>
-        <input
-          className="input is-small"
-          type="text"
-          id="TransactionInputStockTotal"
-          onChange={(e) => onChange(e, 'stockTotal')}
-        />
-      </div>
-      <div className="transactionInput block">
-        <label><b>Average Cost Per Share</b></label>
-        <input
-          className="input is-small"
-          type="text"
-          id="TransactionInputAvgCost"
-          onChange={(e) => onChange(e, 'avgCost')}
-        />
-      </div>
-      <div className="transactionInput block">
-        <label><b>Date</b></label>
-        <input
-          className="input is-small"
-          type="date"
-          id="TransactionInputTransactionDate"
-          onChange={(e) => onChange(e, 'transactionDate')}
-        />
-      </div>
-      <div className="control transactionInput block">
-        <label>
-          <span className="has-text-weight-bold is-size-7">
-            Order Type
-          </span>
-        </label>
-        <div className="my-2">
-        <label className="radio">
+      <div style={inputStyles} className="transactionInputs block is-size-7 is-flex">
+        <div className="transactionInput block">
+          <label><b>Ticker</b></label>
           <input
-            type="radio"
-            name="orderType"
-            className="is-small mr-2"
-            value="BUY"
-            id="TransactionInputBuy"
-            onChange={(e) => onChange(e, 'orderType')}
+            className="input is-small"
+            type="text"
+            id="TransactionInputTicker"
+            onChange={(e) => onChange(e, 'ticker')}
           />
-            <span className="is-size-7">Buy</span>
-        </label>
-        <label className="radio">
-          <input
-            type="radio"
-            name="orderType"
-            className="is-small mr-2"
-            value="SELL"
-            id="TransactionInputSell"
-            onChange={(e) => onChange(e, 'orderType')}  
-          />
-            <span className="is-size-7">Sell</span>
-        </label>
         </div>
-      </div>
-      <div className="transactionInput block">
-        <button
-          className="button is-success is-rounded is-small"
-          id="submit"
-          onClick={(e) => handleClick(e)}
-        >
-          Add Holding
-        </button>
+        <div className="transactionInput block">
+          <label><b>Shares Total</b></label>
+          <input
+            className="input is-small"
+            type="text"
+            id="TransactionInputStockTotal"
+            onChange={(e) => onChange(e, 'stockTotal')}
+          />
+        </div>
+        <div className="transactionInput block">
+          <label><b>Average Cost Per Share</b></label>
+          <input
+            className="input is-small"
+            type="text"
+            id="TransactionInputAvgCost"
+            onChange={(e) => onChange(e, 'avgCost')}
+          />
+        </div>
+        <div className="transactionInput block">
+          <label><b>Date</b></label>
+          <input
+            className="input is-small"
+            type="date"
+            id="TransactionInputTransactionDate"
+            onChange={(e) => onChange(e, 'transactionDate')}
+          />
+        </div>
+        <div className="control transactionInput block">
+          <label>
+            <span className="has-text-weight-bold is-size-7">
+              Order Type
+            </span>
+          </label>
+          <div className="my-2">
+          <label className="radio">
+            <input
+              type="radio"
+              name="orderType"
+              className="is-small mr-2"
+              value="BUY"
+              id="TransactionInputBuy"
+              onChange={(e) => onChange(e, 'orderType')}
+            />
+              <span className="is-size-7">Buy</span>
+          </label>
+          <label className="radio">
+            <input
+              type="radio"
+              name="orderType"
+              className="is-small mr-2"
+              value="SELL"
+              id="TransactionInputSell"
+              onChange={(e) => onChange(e, 'orderType')}  
+            />
+              <span className="is-size-7">Sell</span>
+          </label>
+          </div>
+        </div>
+        <div className="transactionInput block">
+          <button
+            className="button is-success is-rounded is-small"
+            id="submit"
+            onClick={(e) => handleClick(e)}
+          >
+            Add Holding
+          </button>
+        </div>
       </div>
     </div>
   )

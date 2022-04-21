@@ -12,7 +12,7 @@ function TransactionRow (props) {
     props.removeTransaction(id)
   }
   return (
-    <li className="transactionData block p-3 is-size-7" style={rowStyles}>
+    <li className="transactionData p-3 is-size-7" style={rowStyles}>
       <span className="transactionTicker px-3">
         <span className="has-text-weight-bold">
           Ticker:
