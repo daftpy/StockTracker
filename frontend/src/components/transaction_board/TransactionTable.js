@@ -49,7 +49,7 @@ function TransactionRow (props) {
         </button>
         <button
           id="deleteTransaction"
-          onClick={props.toggleModal}
+          onClick={(e) => props.toggleModal(e, props.transaction)}
           className="button transactionEditButton p-2 m-1 is-info is-rounded is-small"
           style={{lineHeight: '9px', height: '2em'}}
         >

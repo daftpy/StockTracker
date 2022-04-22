@@ -11,7 +11,7 @@ function EditTransactionModal(props) {
     <div className="modal-content p-0 mt-6">
       <div className="box">
         <h5 className="is-size-5">Edit Transaction</h5>
-        <TransactionInput />
+        <TransactionInput transaction={props.transaction} inputErrors={props.inputErrors} />
       </div>
     </div>
     <button className="modal-close is-large" onClick={props.toggleModal} aria-label="close"></button>

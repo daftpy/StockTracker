@@ -1,70 +1,69 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './/styles/TransactionInput.css';
 
 function TransactionInput(props) {
   /*
-    newHolding will hold the value of the inputElements. When the user hits submit, 
+    inputData will hold the value of the inputElements. When the user hits submit, 
     the values are sent to the python server, validated, saved, and returns a 
     validation response.
   */
-  const [inputErrors, setErrors] = useState({});
-  const newHolding = {};
+  const [inputData, setInputData] = useState({});
   const inputStyles = {
     justifyContent : 'space-between',
     alignItems: 'center',
     width: '100%'
   }
-  const inputElements = document.getElementsByTagName('input');
 
-  function handleClick(e) {
+  async function handleClick(e) {
     e.preventDefault();
-    /* Clone the state before modifying */
-    const holdings = Object.assign({}, props.holdings);
-    const transactions = props.transactions.slice();
-    /* 
-      Post the input to the transactions endpoint. If the post request is succesful,
-      add the new transaction to the cloned array and set the transactions state.
-    */
-    axios.post(`http://localhost:8000/transactions/`, {
-      "ticker": newHolding['ticker'],
-      "stock_quantity": newHolding['stockTotal'],
-      "avg_cost": newHolding['avgCost'],
-      'trade_date': newHolding['transactionDate'],
-      'order_type': newHolding['orderType']
-    })
-    .then(res => {
-      if (res.status === 201) {
-        transactions.push({
-          'id': res.data['id'],
-          'ticker': res.data['ticker'],
-          'stockTotal': res.data['stock_quantity'],
-          'avgCost': res.data['avg_cost'],
-          'transactionDate': res.data['trade_date'],
-          'orderType': res.data['order_type']
-        });
-        props.setTransactions(transactions);
-        setErrors({});
+    let result = await props.formAction(inputData)
+    // if the formAction is succesful, clear the inputs
+    if (result === true) {
+      console.log('clearing inputs');
+      let inputElements = document.getElementsByTagName('input');
+      for (let i = 0; i < inputElements.length; i++) {
+        inputElements[i].type === 'radio' ?
+        inputElements[i].checked = '' : inputElements[i].value = '';
       }
-    })
-    .catch((error) => {
-      console.log(error.response.data)
-      error.response.data ? setErrors(error.response.data) : console.log('unexpected');
-    })
-    
-    /* Set the holdings data, wip */
-    holdings[newHolding["ticker"]] = newHolding["stockTotal"];
-    props.setHoldings(holdings);
-    /* Loop through the inputElements and reset their values */
-    for (let i = 0; i < inputElements.length; i++) {
-      inputElements[i].type === 'radio' ?
-      inputElements[i].checked = '' : inputElements[i].value = '';
     }
   }
 
   function onChange(e, key) {
-    newHolding[key] = e.target.value;
+    // Clone state before modifying.
+    let newInput = Object.assign({}, inputData)
+    newInput[key] = e.target.value
+    setInputData(newInput)
   }
+
+  useEffect(() => {
+    let inputElements = {
+      'ticker': document.querySelector('#TransactionInputTicker'),
+      'stockTotal': document.querySelector('#TransactionInputStockTotal'),
+      'avgCost': document.querySelector('#TransactionInputAvgCost'),
+      'transactionDate': document.querySelector('#TransactionInputTransactionDate'),
+    }
+    /* If props.transaction exists, populate the input fields */
+    if (props.transaction) {
+      inputElements['ticker'].value = props.transaction['ticker'];
+      inputElements['stockTotal'].value = props.transaction['stockTotal'];
+      inputElements['avgCost'].value = props.transaction['avgCost'];
+      inputElements['transactionDate'].value = props.transaction['transactionDate'];
+      if (props.transaction['orderType'] === 'BUY') {
+        document.querySelector('#TransactionInputBuy').checked = true
+      } else {
+        document.querySelector('#TransactionInputSell').checked = true
+      }
+      // And set the state
+      setInputData({
+        'ticker': props.transaction['ticker'],
+        'stockTotal': props.transaction['stockTotal'],
+        'avgCost': props.transaction['avgCost'],
+        'transactionDate': props.transaction['transactionDate'],
+        'orderType': props.transaction['orderType']
+      })
+    }
+  },[props.transaction])
 
   return (
     <div>
@@ -75,9 +74,11 @@ function TransactionInput(props) {
           justifyContent: 'space-around',
           flexWrap: 'wrap'
         }}>
-        {Object.keys(inputErrors).map(function(key) {
-          return <span className="tag is-danger is-rounded is-size-7 my-1">{key} {inputErrors[key]}</span> 
-        })}
+        {props.inputErrors !== undefined &&
+          Object.keys(props.inputErrors).map(function(key) {
+          return <span key={key} className="tag is-danger is-rounded is-size-7 my-1">{key} {props.inputErrors[key]}</span> 
+        })
+        }
       </div>
       <div style={inputStyles} className="transactionInputs block is-size-7 is-flex">
         <div className="transactionInput block">
