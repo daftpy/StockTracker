@@ -55,6 +55,7 @@ function TransactionInput(props) {
       }
       // And set the state
       setInputData({
+        'id': props.transaction['id'],
         'ticker': props.transaction['ticker'],
         'stockTotal': props.transaction['stockTotal'],
         'avgCost': props.transaction['avgCost'],

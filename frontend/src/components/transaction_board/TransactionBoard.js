@@ -10,9 +10,11 @@ function TransactionBoard(props) {
   const [inputErrors, setErrors] = useState({});
   const [targetTransaction, setTarget] = useState({});
 
-  function toggleModal(e, transaction) {
+  function toggleModal(transaction) {
     setVisibility(!modalVisibility);
-    setTarget(transaction);
+    if (transaction) {
+      setTarget(transaction);
+    }
     setErrors({});
   }
 
@@ -53,11 +55,36 @@ function TransactionBoard(props) {
     return success;
   }
 
+  async function editTransaction(transaction) {
+    // Clone the state before modifying
+    const transactions = props.transactions.slice();
+
+    let success = false;
+    await axios.put(`http://localhost:8000/transactions/${transaction['id']}/`, {
+      'id': transaction['id'],
+      'ticker': transaction['ticker'],
+      'stock_quantity': transaction['stockTotal'],
+      'avg_cost': transaction['avgCost'],
+      'trade_date': transaction['transactionDate'],
+      'order_type': transaction['orderType']
+    })
+    .then(res => {
+      if (res.status === 200) {
+        toggleModal();
+        let updatedTransactions = transactions.map(
+          obj => obj['id'] === transaction['id'] ? transaction : obj
+        )
+        props.setTransactions(updatedTransactions);
+      }
+    })
+  }
+
   return (
     <div>
       <EditModalWrapper
         transaction={targetTransaction}
         inputErrors={inputErrors}
+        editTransaction={editTransaction}
         visibility={modalVisibility}
         toggleModal={toggleModal}
       />
