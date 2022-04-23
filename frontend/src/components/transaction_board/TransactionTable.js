@@ -13,10 +13,11 @@ function TransactionRow (props) {
   }
   return (
     <li className="transactionData block p-3 is-size-7" style={rowStyles}>
-      <span className="transactionTicker px-3">
+      <span className="px-3">
         <span className="is-hidden-mobile has-text-weight-bold">
           Ticker:
-        </span> {props.transaction['ticker']}
+        </span>
+        <span className="transactionTicker"> {props.transaction['ticker']}</span>
       </span>
       <span className="transactionStockTotal px-3">
         <span className="is-hidden-mobile has-text-weight-bold">
@@ -36,7 +37,14 @@ function TransactionRow (props) {
       <span className="transactionOrderType px-3">
         <span className="is-hidden-mobile has-text-weight-bold">
           Order Type:
-        </span> {props.transaction['orderType']}
+        </span>
+        {
+          props.transaction['orderType'] == 'BUY' ? (
+            <span className="has-text-success has-text-weight-bold"> {props.transaction['orderType']}</span>
+          ) : (
+            <span className="has-text-danger has-text-weight-bold"> {props.transaction['orderType']}</span>
+          )
+        }
       </span>
       <span>
         <button
@@ -63,7 +71,7 @@ function TransactionRow (props) {
 function TransactionTable(props) {
   return (
     <div className="block">
-      <h4 className="is-size-4">Transactions</h4>
+      <h4 className="title is-size-4">Transactions</h4>
         <ul style={{marginLeft: '0'}}>
           {props.transactions.map((transaction, i) => {
             return (

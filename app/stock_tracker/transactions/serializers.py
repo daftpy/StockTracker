@@ -19,3 +19,9 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transaction
         fields = ['id', 'ticker', 'stock_quantity', 'avg_cost', 'trade_date', 'order_type']
+
+
+class HoldingSerializer(serializers.Serializer):
+    ticker = serializers.CharField(read_only=True)
+    stock_total = serializers.FloatField(read_only=True)
+

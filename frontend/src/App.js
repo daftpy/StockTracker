@@ -3,10 +3,12 @@ import getCookie from './helpers/getCookie';
 import getTransactionData from './helpers/getTransactionData';
 import axios from 'axios';
 import TransactionBoard from './components/transaction_board/TransactionBoard';
+import HoldingBoard from './components/holding_board/HoldingBoard';
 import './App.css';
 
 function App() {
   const [transactionsList, setTransactions] = useState([])
+  const [holdings, setHoldings] = useState([])
 
   useEffect(() => {
     const transactions = transactionsList.slice();
@@ -14,14 +16,33 @@ function App() {
       .then(res => {
         let results = res.data.results;
         if (res.status === 200) {
-          console.log(res.data.results)
+          // console.log(res)
           let newTransactions = getTransactionData(results);
           setTransactions([].concat(transactions, newTransactions));
         }
       })
+
+      axios.get('http://localhost:8000/holdings/')
+        .then(res => {
+          let results = res.data
+          if (res.status === 200) {
+            setHoldings(results)
+          }
+        })
     },
     []
   );
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/holdings/')
+    .then(res => {
+      let results = res.data
+      if (res.status === 200) {
+        setHoldings(results)
+      }
+    }) 
+  },
+  [transactionsList])
 
   function removeTransaction(id) {
     let transactions = transactionsList.slice();
@@ -39,6 +60,7 @@ function App() {
   return (
     <div className="App">
       <div className="content my-2 mx-6">
+        <HoldingBoard holdings={holdings} />
         <TransactionBoard
           transactions={transactionsList}
           setTransactions={setTransactions}

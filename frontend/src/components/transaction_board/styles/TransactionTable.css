@@ -10,11 +10,11 @@
 .transactionData:hover {
     background-color: #ebefff;
 }
-/* @media (min-width: 768px) {
-    .transactionData {
-        flex-direction: row;
+.transactionTicker {
+    font-weight: bold;
+}
+@media (min-width: 768px) {
+    .transactionTicker {
+        font-weight: normal;
     }
-    .transactionData > span {
-        margin-bottom: 0;
-    }
-} */
+}

@@ -11,5 +11,6 @@ router.register(r'transactions', views.TransactionViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('holdings/', views.HoldingsViewSet.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
