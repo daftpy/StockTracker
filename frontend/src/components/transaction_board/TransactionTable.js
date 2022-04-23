@@ -12,29 +12,29 @@ function TransactionRow (props) {
     props.removeTransaction(id)
   }
   return (
-    <li className="transactionData p-3 is-size-7" style={rowStyles}>
+    <li className="transactionData block p-3 is-size-7" style={rowStyles}>
       <span className="transactionTicker px-3">
-        <span className="has-text-weight-bold">
+        <span className="is-hidden-mobile has-text-weight-bold">
           Ticker:
         </span> {props.transaction['ticker']}
       </span>
       <span className="transactionStockTotal px-3">
-        <span className="has-text-weight-bold">
+        <span className="is-hidden-mobile has-text-weight-bold">
           Total:
         </span> {props.transaction['stockTotal']}
       </span>
       <span className="transactionAvgCost px-3">
-        <span className="has-text-weight-bold">
+        <span className="is-hidden-mobile has-text-weight-bold">
           Avg Cost:
-        </span> {props.transaction['avgCost']}
+        </span> ${props.transaction['avgCost']}
       </span>
       <span className="transactionDate px-3">
-        <span className="has-text-weight-bold">
+        <span className="is-hidden-mobile dateTitle has-text-weight-bold">
           Transaction Date:
         </span> {props.transaction['transactionDate']}
       </span>
       <span className="transactionOrderType px-3">
-        <span className="has-text-weight-bold">
+        <span className="is-hidden-mobile has-text-weight-bold">
           Order Type:
         </span> {props.transaction['orderType']}
       </span>

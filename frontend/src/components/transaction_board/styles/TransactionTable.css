@@ -1,5 +1,5 @@
 .transactionData {
-    flex-direction: column;
+    flex-direction: row;
     border-radius: 2em;
     transition: .5s;
     -o-transition:.5s;
@@ -7,20 +7,14 @@
     -moz-transition:.5s;
     -webkit-transition:.5s;
 }
-.transactionData > span {
-    margin-bottom: 2em;
-}
-.transactionData > span:last-child {
-    margin-bottom: 0;
-}
 .transactionData:hover {
     background-color: #ebefff;
 }
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .transactionData {
         flex-direction: row;
     }
     .transactionData > span {
         margin-bottom: 0;
     }
-}
+} */
