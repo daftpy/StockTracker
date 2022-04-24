@@ -84,7 +84,7 @@ function TransactionTable(props) {
                 />
               )
             })
-          } else {
+          } {
             props.filteredTransactions.map((transaction, i) => {
               return (
                 <TransactionRow
