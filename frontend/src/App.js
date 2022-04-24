@@ -15,20 +15,12 @@ function App() {
     axios.get(`http://localhost:8000/transactions/`)
       .then(res => {
         let results = res.data.results;
-        if (res.status === 200) {
+        if (res.status === 200 && results.length > 0) {
           // console.log(res)
           let newTransactions = getTransactionData(results);
           setTransactions([].concat(transactions, newTransactions));
         }
       })
-
-      axios.get('http://localhost:8000/holdings/')
-        .then(res => {
-          let results = res.data
-          if (res.status === 200) {
-            setHoldings(results)
-          }
-        })
     },
     []
   );

@@ -1,0 +1,14 @@
+.holdings {
+    flex-direction: column;
+}
+.holdingWrapper {
+    border-radius: .5em;
+}
+.holding:not(:last-child) {
+    margin-bottom: 1.5rem;
+}
+@media (min-width: 576px) {
+    .holdings {
+        flex-direction: row;
+    }
+}

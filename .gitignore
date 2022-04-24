@@ -15,6 +15,7 @@ frontend/build
 # misc
 db.sqlite3
 .DS_Store
+.env.dev
 .env.local
 .env.development.local
 .env.test.local

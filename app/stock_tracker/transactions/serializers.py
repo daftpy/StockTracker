@@ -24,4 +24,4 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
 class HoldingSerializer(serializers.Serializer):
     ticker = serializers.CharField(read_only=True)
     stock_total = serializers.FloatField(read_only=True)
-
+    value = serializers.FloatField(read_only=True)

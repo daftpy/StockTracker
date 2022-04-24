@@ -8,8 +8,13 @@ from stock_tracker.transactions.models import Transaction
 from stock_tracker.transactions.serializers import UserSerializer, GroupSerializer, \
     TransactionSerializer, HoldingSerializer
 
-from stock_tracker.transactions.models import Transaction
+import os
 import pandas as pd
+import requests
+
+from stock_tracker.transactions.models import Transaction
+
+API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -44,20 +49,29 @@ class HoldingsViewSet(generics.GenericAPIView):
     def get(self, request):
         holdings = {}
         transactions = self.get_queryset()
-        # put the transactions in a list to load them into the dataframe
-        data_frame = pd.DataFrame(list(transactions))
-        # groupby and sum the stock quantity and order types
-        grouped_data = data_frame.groupby(['ticker', 'order_type'])['stock_quantity'].sum()
-        for key, value in grouped_data.to_dict().items():
-            try:
-                # if the key already exists, add the value
-                holdings[key[0]] +=  value if key[1] == 'BUY' else -value
-            except:
-                # if the key does not exist yet, set the value
-                holdings[key[0]] = value if key[1] == 'BUY' else -value
-        print(holdings)
-        # get the data out of the dataframe and into a list of dictionaries so we can serialize it
-        data = [{'ticker': key, 'stock_total': value} for key, value in holdings.items()]
-        print(data)
-        serializer = self.serializer_class(data, many=True)
-        return Response(serializer.data)
+        if transactions:
+            # put the transactions in a list to load them into the dataframe
+            data_frame = pd.DataFrame(list(transactions))
+            # groupby and sum the stock quantity and order types
+            grouped_data = data_frame.groupby(['ticker', 'order_type'])['stock_quantity'].sum()
+            for key, value in grouped_data.to_dict().items():
+                try:
+                    # if the key already exists, add the value
+                    holdings[key[0]] +=  value if key[1] == 'BUY' else -value
+                except:
+                    # if the key does not exist yet, set the value
+                    holdings[key[0]] = value if key[1] == 'BUY' else -value
+            print(holdings)
+            # get the data out of the dataframe and into a list of dictionaries so we can serialize it
+            # data = [{'ticker': key, 'stock_total': value} for key, value in holdings.items()]
+            data = []
+            for key, value in holdings.items():
+                url = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={key}&apikey={API_KEY}'
+                r = requests.get(url)
+                result = r.json()
+                latest_price = float(result['Global Quote']['08. previous close'])
+                print(latest_price)
+                data.append({"ticker": key, "stock_total": value, "value": latest_price * value})
+            serializer = self.serializer_class(data, many=True)
+            return Response(serializer.data)
+        return Response({})
