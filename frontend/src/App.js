@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import getCookie from './helpers/getCookie';
 import getTransactionData from './helpers/getTransactionData';
 import axios from 'axios';
 import TransactionBoard from './components/transaction_board/TransactionBoard';
@@ -9,6 +8,8 @@ import './App.css';
 function App() {
   const [transactionsList, setTransactions] = useState([])
   const [holdings, setHoldings] = useState([])
+  const [filteredTickers, setFilteredTickers] = useState([])
+  const [filteredTransactions, setFilteredTransactions] = useState([])
 
   useEffect(() => {
     const transactions = transactionsList.slice();
@@ -21,20 +22,38 @@ function App() {
           setTransactions([].concat(transactions, newTransactions));
         }
       })
-    },
-    []
+  },
+  []
   );
 
   useEffect(() => {
-    axios.get('http://localhost:8000/holdings/')
-    .then(res => {
-      let results = res.data
-      if (res.status === 200) {
-        setHoldings(results)
-      }
-    }) 
+    // only get holdings if we load transactions
+    if (transactionsList.length > 0) {
+      axios.get('http://localhost:8000/holdings/')
+      .then(res => {
+        let results = res.data
+        if (res.status === 200) {
+          setHoldings(results)
+        }
+      }) 
+    }
   },
-  [transactionsList])
+  [transactionsList]
+  )
+
+  useEffect(() => {
+    filterTransactions();
+  },[filteredTickers])
+
+  function filterTransactions() {
+    setFilteredTransactions([]);
+    let filters = []
+    console.log(filteredTickers)
+    transactionsList.forEach(transaction => {
+      if (filteredTickers.includes(transaction.ticker)) filters.push(transaction);
+    })
+    setFilteredTransactions(filters);
+  }
 
   function removeTransaction(id) {
     let transactions = transactionsList.slice();
@@ -52,11 +71,18 @@ function App() {
   return (
     <div className="App">
       <div className="content my-2 mx-6">
-        <HoldingBoard holdings={holdings} />
+        <HoldingBoard
+          holdings={holdings}
+          setFilteredTickers={setFilteredTickers}
+          filteredTickers={filteredTickers}
+          filterTransactions={filterTransactions}
+        />
         <TransactionBoard
           transactions={transactionsList}
           setTransactions={setTransactions}
           removeTransaction={removeTransaction}
+          filteredTickers={filteredTickers}
+          filteredTransactions={filteredTransactions}
         />
       </div>
     </div>

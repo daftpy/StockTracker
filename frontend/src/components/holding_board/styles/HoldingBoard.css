@@ -4,6 +4,9 @@
 .holdingWrapper {
     border-radius: .5em;
 }
+.holding:hover {
+    cursor: pointer;
+}
 .holding:not(:last-child) {
     margin-bottom: 1.5rem;
 }

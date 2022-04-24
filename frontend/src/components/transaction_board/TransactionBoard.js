@@ -91,6 +91,8 @@ function TransactionBoard(props) {
       <TransactionTable
         transactions={props.transactions}
         removeTransaction={props.removeTransaction}
+        filteredTickers={props.filteredTickers}
+        filteredTransactions={props.filteredTransactions}
         toggleModal={toggleModal}
         modalVisibility={modalVisibility}
       />

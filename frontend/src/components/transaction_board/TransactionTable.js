@@ -73,16 +73,29 @@ function TransactionTable(props) {
     <div className="block">
       <h4 className="title is-size-4">Transactions</h4>
         <ul style={{marginLeft: '0'}}>
-          {props.transactions.map((transaction, i) => {
-            return (
-              <TransactionRow
-                key={transaction['id']}
-                transaction={transaction}
-                removeTransaction={props.removeTransaction}
-                toggleModal={props.toggleModal}
-              />
-            )
-          })}
+          {props.filteredTickers.length == 0 &&
+            props.transactions.map((transaction, i) => {
+              return (
+                <TransactionRow
+                  key={transaction['id']}
+                  transaction={transaction}
+                  removeTransaction={props.removeTransaction}
+                  toggleModal={props.toggleModal}
+                />
+              )
+            })
+          } else {
+            props.filteredTransactions.map((transaction, i) => {
+              return (
+                <TransactionRow
+                  key={transaction['id']}
+                  transaction={transaction}
+                  removeTransaction={props.removeTransaction}
+                  toggleModal={props.toggleModal}
+                />
+              )
+            })
+          }
         </ul>
     </div>
   );
