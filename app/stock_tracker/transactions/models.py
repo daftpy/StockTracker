@@ -10,3 +10,6 @@ class Transaction(models.Model):
     avg_cost = models.FloatField()
     trade_date = models.DateField()
     order_type = models.CharField(choices=ORDER_CHOICES, max_length=255)
+
+    class Meta:
+        ordering = ['-trade_date', '-id']
