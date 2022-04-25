@@ -55,19 +55,6 @@ function App() {
     setFilteredTransactions(filters);
   }
 
-  function removeTransaction(id) {
-    let transactions = transactionsList.slice();
-    // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
-    let removeTransaction = transactions.map(
-      transaction => transaction.id
-    ).indexOf(id);
-    ~removeTransaction && transactions.splice(removeTransaction, 1);
-    axios.delete(`http://localhost:8000/transactions/${id}/`)
-      .then(res => {
-        setTransactions(transactions);
-      })
-  }
-
   return (
     <div className="App">
       <div className="content my-2 mx-6">
@@ -80,7 +67,6 @@ function App() {
         <TransactionBoard
           transactions={transactionsList}
           setTransactions={setTransactions}
-          removeTransaction={removeTransaction}
           filteredTickers={filteredTickers}
           filteredTransactions={filteredTransactions}
         />

@@ -79,6 +79,19 @@ function TransactionBoard(props) {
     })
   }
 
+  function removeTransaction(id) {
+    let transactions = props.transactions.slice();
+    // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
+    let removeTransaction = transactions.map(
+      transaction => transaction.id
+    ).indexOf(id);
+    ~removeTransaction && transactions.splice(removeTransaction, 1);
+    axios.delete(`http://localhost:8000/transactions/${id}/`)
+      .then(res => {
+        props.setTransactions(transactions);
+      })
+  }
+
   return (
     <div>
       <EditModalWrapper
@@ -90,7 +103,7 @@ function TransactionBoard(props) {
       />
       <TransactionTable
         transactions={props.transactions}
-        removeTransaction={props.removeTransaction}
+        removeTransaction={removeTransaction}
         filteredTickers={props.filteredTickers}
         filteredTransactions={props.filteredTransactions}
         toggleModal={toggleModal}
