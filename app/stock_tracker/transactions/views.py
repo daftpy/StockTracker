@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from stock_tracker.transactions.models import Transaction
 from stock_tracker.transactions.serializers import UserSerializer, GroupSerializer, \
-    TransactionSerializer, HoldingSerializer
+    TransactionSerializer, HoldingSerializer, DailyPriceDataSerializer
 
 import os
 import pandas as pd
@@ -61,7 +61,6 @@ class HoldingsViewSet(generics.GenericAPIView):
                 except:
                     # if the key does not exist yet, set the value
                     holdings[key[0]] = value if key[1] == 'BUY' else -value
-            print(holdings)
             # get the data out of the dataframe and into a list of dictionaries so we can serialize it
             # data = [{'ticker': key, 'stock_total': value} for key, value in holdings.items()]
             data = []
@@ -70,8 +69,25 @@ class HoldingsViewSet(generics.GenericAPIView):
                 r = requests.get(url)
                 result = r.json()
                 latest_price = float(result['Global Quote']['08. previous close'])
-                print(latest_price)
                 data.append({"ticker": key, "stock_total": value, "value": latest_price * value})
             serializer = self.serializer_class(data, many=True)
+            return Response(serializer.data)
+        return Response({})
+
+class DailyPriceDataView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Transaction.objects.all().values()
+    serializer_class = DailyPriceDataSerializer
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        if kwargs["ticker"]:
+            ticker = kwargs["ticker"]
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={API_KEY}"
+            r = requests.get(url)
+            result = r.json()
+            for obj in result['Time Series (Daily)'].items():
+                data.append({'trade_date': obj[0], 'close_price': obj[1]['4. close']})
+            serializer = DailyPriceDataSerializer(data, many=True)
             return Response(serializer.data)
         return Response({})

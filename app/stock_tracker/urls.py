@@ -12,5 +12,6 @@ router.register(r'transactions', views.TransactionViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('holdings/', views.HoldingsViewSet.as_view()),
+    path('daily_price/<str:ticker>/', views.DailyPriceDataView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
