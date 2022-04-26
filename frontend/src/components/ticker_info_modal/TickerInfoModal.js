@@ -13,12 +13,18 @@ function TickerInfoModal(props) {
         width: '100%'
       },
       xaxis: {
+        type: 'datetime',
         categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
       },
     },
+    chart: {
+      toolbar: {
+        show: false
+      }
+    },
     series: [
       {
-        name: "series-1",
+        name: "close-price",
         data: [30, 40, 45, 50, 49, 60, 70, 91]
       }
     ]  
@@ -42,15 +48,19 @@ function TickerInfoModal(props) {
             options: {
               chart: {
                 id: "basic-line",
-                width: '100%'
+                width: '100%',
+                toolbar: {
+                  show: false
+                }
               },
               xaxis: { // get the last 30 labels
+                type: 'datetime',
                 categories: labels.slice(Math.max(prices.length - 30, 0))
               },
             },
             series: [
               {
-                name: "series-1",
+                name: "close-price",
                 // get the last 30 days of pricing data
                 data: prices.slice(Math.max(prices.length - 30, 0))
               }
