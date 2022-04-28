@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from stock_tracker.transactions.models import Transaction
 from stock_tracker.transactions.serializers import UserSerializer, GroupSerializer, \
-    TransactionSerializer, HoldingSerializer, DailyPriceDataSerializer, TickerDetailsSerializer
+    TransactionSerializer, HoldingSerializer, DailyPriceDataSerializer
 
 import os
 import pandas as pd
