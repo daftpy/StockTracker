@@ -26,6 +26,7 @@ class HoldingSerializer(serializers.Serializer):
     stock_total = serializers.FloatField(read_only=True)
     value = serializers.FloatField(read_only=True)
 
+
 class DailyPriceDataSerializer(serializers.Serializer):
     close_price = serializers.FloatField(read_only=True)
     trade_date = serializers.DateField(read_only=True)

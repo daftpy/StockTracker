@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from stock_tracker.transactions.models import Transaction
 from stock_tracker.transactions.serializers import UserSerializer, GroupSerializer, \
-    TransactionSerializer, HoldingSerializer, DailyPriceDataSerializer
+    TransactionSerializer, HoldingSerializer, DailyPriceDataSerializer, TickerDetailsSerializer
 
 import os
 import pandas as pd
@@ -74,9 +74,9 @@ class HoldingsViewSet(generics.GenericAPIView):
             return Response(serializer.data)
         return Response({})
 
+
 class DailyPriceDataView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Transaction.objects.all().values()
     serializer_class = DailyPriceDataSerializer
 
     def get(self, request, *args, **kwargs):
@@ -90,4 +90,17 @@ class DailyPriceDataView(generics.GenericAPIView):
                 data.append({'trade_date': obj[0], 'close_price': obj[1]['4. close']})
             serializer = DailyPriceDataSerializer(data, many=True)
             return Response(serializer.data)
+        return Response({})
+
+
+class TickerDetaisView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        if kwargs["ticker"]:
+            ticker = kwargs["ticker"]
+            url = f"https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={API_KEY}"
+            r = requests.get(url)
+            result = r.json()
+            return Response({'details': result['Description']})
         return Response({})

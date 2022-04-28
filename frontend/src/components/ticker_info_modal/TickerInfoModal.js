@@ -6,6 +6,7 @@ import axios from 'axios';
 function TickerInfoModal(props) {
   let activeStyle = {};
   props.visibility ? activeStyle = {display: 'flex'} : activeStyle = {display: 'none'};
+  const [tickerDetails, setDetails] = useState('');
   const [chartData, setData] = useState({
     options: {
       chart: {
@@ -70,6 +71,13 @@ function TickerInfoModal(props) {
           setData(newChart);
         }
       })
+
+      axios.get(`http://localhost:8000/ticker_details/${ticker}/`)
+      .then(res => {
+        if (res.status === 200) {
+          setDetails(res.data['details'])
+        }
+      })
     }
   }
 
@@ -84,7 +92,6 @@ function TickerInfoModal(props) {
 
       <div className="modal-content p-0 mt-6">
         <div className="box">
-          <div className="block has-text-weight-bold is-size-5">{props.ticker}</div>
           <div className="block">
             <Chart
               options={chartData.options}
@@ -92,6 +99,8 @@ function TickerInfoModal(props) {
               type="line"
             />
           </div>
+          <div className="block has-text-weight-bold is-size-4">{props.ticker}</div>
+          <p className="block">{tickerDetails}</p>
         </div>
       </div>
       <button className="modal-close is-large" onClick={props.toggleModal} aria-label="close"></button>
