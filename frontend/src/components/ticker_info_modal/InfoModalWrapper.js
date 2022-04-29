@@ -8,10 +8,11 @@ function InfoModalWrapper(props) {
         visibility={true}
         toggleModal={props.toggleModal}
         ticker={props.ticker}
+        transactions={props.transactions}
       />
     )
   } else {
-    return (<TickerInfoModal visibility={false} toggleModal={props.toggleModal}/>)
+    return;
   }
 }
 

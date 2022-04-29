@@ -13,7 +13,7 @@ function EditModalWrapper(props) {
       />
     )
   } else {
-    return (<EditTransactionModal visibility={false} toggleModal={props.toggleModal}/>)
+    return;
   }
 }
 

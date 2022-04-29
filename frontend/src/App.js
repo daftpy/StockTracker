@@ -55,6 +55,7 @@ function App() {
           setFilteredTickers={setFilteredTickers}
           filteredTickers={filteredTickers}
           filterTransactions={filterTransactions}
+          transactions={transactionsList}
         />
         <TransactionBoard
           transactions={transactionsList}

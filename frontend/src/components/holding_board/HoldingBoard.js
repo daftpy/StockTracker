@@ -31,7 +31,9 @@ function HoldingBoard(props) {
       its child anchor tag. The child anchor tag will bring up more info about
       that additional holding.
     */
-    if (e.target != document.querySelector('.tickerInfoButton')) {
+    let elements = Array.from(document.getElementsByClassName('tickerInfoButton'));
+    if (!elements.includes(e.target)) {
+      console.log(e.target)
       let currentFilter = props.filteredTickers.slice();
       let activeElement = document.getElementById(`${holdingTicker}`);
       if (activeElement.getAttribute('is-active') == 'true') {
@@ -50,7 +52,7 @@ function HoldingBoard(props) {
   }
   return (
     <div className="block">
-      <InfoModalWrapper toggleModal={toggleModal} visibility={modalVisibility} setVisibility={setVisibility} ticker={targetTicker}/>
+      <InfoModalWrapper transactions={props.transactions} toggleModal={toggleModal} visibility={modalVisibility} setVisibility={setVisibility} ticker={targetTicker}/>
       <h3 className="title">Holdings</h3>
       <div className="block"><b>Total Portfiolio Value</b>: ${totalPortfolioValue}</div>
       <div className="holdings has-text-white is-flex is-justify-content-space-around">

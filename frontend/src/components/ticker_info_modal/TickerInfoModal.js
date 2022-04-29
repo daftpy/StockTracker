@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
+import TransactionTable from '../transaction_board/TransactionTable';
 
 import axios from 'axios';
 
@@ -87,9 +88,12 @@ function TickerInfoModal(props) {
 
   useEffect(() => {
     getTickerInfo(props.ticker);
-  },
-  [props.ticker]
-  )
+  }, [props.ticker])
+
+  const transactions = [];
+  props.transactions.forEach(transaction => {
+    if (transaction.ticker == props.ticker) transactions.push(transaction);
+  })
   return (
     <div id="TickerInfoModal" className="modal" style={activeStyle}>
       <div className="modal-background"></div>
@@ -104,7 +108,11 @@ function TickerInfoModal(props) {
             />
           </div>
           <div className="block has-text-weight-bold is-size-4">{props.ticker}</div>
-          <p className="block">{tickerDetails}</p>
+          <div className="block">{tickerDetails}</div>
+          <TransactionTable
+            transactions={transactions}
+            filteredTransactions={[]}
+          />
         </div>
       </div>
       <button className="modal-close is-large" onClick={props.toggleModal} aria-label="close"></button>
