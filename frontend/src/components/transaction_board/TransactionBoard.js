@@ -88,6 +88,7 @@ function TransactionBoard(props) {
     ~removeTransaction && transactions.splice(removeTransaction, 1);
     axios.delete(`http://localhost:8000/transactions/${id}/`)
       .then(res => {
+        console.log(transactions)
         props.setTransactions(transactions);
       })
   }

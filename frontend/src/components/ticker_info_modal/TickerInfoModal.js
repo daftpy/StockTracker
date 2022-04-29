@@ -11,17 +11,18 @@ function TickerInfoModal(props) {
     options: {
       chart: {
         id: "basic-line",
-        width: '100%'
+        width: '100%',
+        toolbar: {
+          show: false
+        },
+        zoom: {
+          enable: false
+        }
       },
       xaxis: {
         type: 'datetime',
         categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
       },
-    },
-    chart: {
-      toolbar: {
-        show: false
-      }
     },
     series: [
       {
@@ -52,6 +53,9 @@ function TickerInfoModal(props) {
                 width: '100%',
                 toolbar: {
                   show: false
+                },
+                zoom: {
+                  enable: false
                 }
               },
               xaxis: { // get the last 30 labels

@@ -73,7 +73,7 @@ function TransactionTable(props) {
     <div className="block">
       <h4 className="title is-size-4">Transactions</h4>
         <ul style={{marginLeft: '0'}}>
-          {props.filteredTickers.length == 0 &&
+          {props.filteredTransactions.length == 0 &&
             props.transactions.map((transaction, i) => {
               return (
                 <TransactionRow

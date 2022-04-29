@@ -72,7 +72,7 @@ class HoldingsViewSet(generics.GenericAPIView):
                 data.append({"ticker": key, "stock_total": value, "value": latest_price * value})
             serializer = self.serializer_class(data, many=True)
             return Response(serializer.data)
-        return Response({})
+        return Response([])
 
 
 class DailyPriceDataView(generics.GenericAPIView):

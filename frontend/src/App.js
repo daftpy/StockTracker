@@ -22,24 +22,17 @@ function App() {
           setTransactions([].concat(transactions, newTransactions));
         }
       })
-  },
-  []
-  );
+  }, []);
 
   useEffect(() => {
-    // only get holdings if we load transactions
-    if (transactionsList.length > 0) {
-      axios.get('http://localhost:8000/holdings/')
-      .then(res => {
-        let results = res.data
-        if (res.status === 200) {
-          setHoldings(results)
-        }
-      }) 
-    }
-  },
-  [transactionsList]
-  )
+    axios.get('http://localhost:8000/holdings/')
+    .then(res => {
+      let results = res.data
+      if (res.status === 200) {
+        setHoldings(results)
+      }
+    }) 
+  }, [transactionsList])
 
   useEffect(() => {
     filterTransactions();
@@ -48,7 +41,6 @@ function App() {
   function filterTransactions() {
     setFilteredTransactions([]);
     let filters = []
-    console.log(filteredTickers)
     transactionsList.forEach(transaction => {
       if (filteredTickers.includes(transaction.ticker)) filters.push(transaction);
     })
@@ -67,7 +59,6 @@ function App() {
         <TransactionBoard
           transactions={transactionsList}
           setTransactions={setTransactions}
-          filteredTickers={filteredTickers}
           filteredTransactions={filteredTransactions}
         />
       </div>

@@ -54,7 +54,7 @@ function HoldingBoard(props) {
       <h3 className="title">Holdings</h3>
       <div className="block"><b>Total Portfiolio Value</b>: ${totalPortfolioValue}</div>
       <div className="holdings has-text-white is-flex is-justify-content-space-around">
-      {Object.keys(props.holdings).length > 0 &&
+      {props.holdings.length > 0 &&
         props.holdings.map(holding => (
           <div className="holding" key={holding.ticker}>
             <div onClick={(e) => toggleActiveHolding(e, holding.ticker)} id={holding.ticker} is-active="false" className="holdingWrapper has-background-grey-dark px-5 py-3">
