@@ -33,6 +33,11 @@ function TickerInfoModal(props) {
     ]  
   });
 
+  const transactions = [];
+  props.transactions.forEach(transaction => {
+    if (transaction.ticker == props.ticker) transactions.push(transaction);
+  })
+
   function getTickerInfo(ticker) {
     if (ticker) {
       axios.get(`http://localhost:8000/daily_price/${ticker}/`)
@@ -47,8 +52,38 @@ function TickerInfoModal(props) {
           })
           labels = labels.reverse()
           prices = prices.reverse()
+          labels = labels.slice(Math.max(prices.length - 30, 0));
+          prices = prices.slice(Math.max(prices.length - 30, 0));
+          let points = []
+          console.log(transactions);
+          transactions.forEach(transaction => {
+            if (labels.includes(transaction.transactionDate)) points.push({
+              x: new Date(transaction.transactionDate).getTime(),
+              y: transaction.avgCost,
+              marker: {
+                size: 6,
+                fillColor: '#fff',
+                strokeColor: (transaction.orderType == 'BUY' ? '#35AC5E' : 'red'),
+                radius: 1,
+              },
+              label: {
+                borderColor: (transaction.orderType == 'BUY' ? '#35AC5En' : 'red'),
+                offsetY: 0,
+                style: {
+                  color: '#fff',
+                  background: (transaction.orderType == 'BUY' ? '#35AC5E' : 'red'),
+                },
+          
+                text: transaction.orderType,
+              }
+            })
+          })
+          console.log('points', points)
           newChart = {
             options: {
+              annotations: {
+                points: points
+              },
               chart: {
                 id: "basic-line",
                 width: '100%',
@@ -61,16 +96,16 @@ function TickerInfoModal(props) {
               },
               xaxis: { // get the last 30 labels
                 type: 'datetime',
-                categories: labels.slice(Math.max(prices.length - 30, 0))
+                categories: labels
               },
             },
             series: [
               {
                 name: "close-price",
                 // get the last 30 days of pricing data
-                data: prices.slice(Math.max(prices.length - 30, 0))
+                data: prices
               }
-            ]            
+            ],    
           }
           // update the chart state
           setData(newChart);
@@ -90,10 +125,6 @@ function TickerInfoModal(props) {
     getTickerInfo(props.ticker);
   }, [props.ticker])
 
-  const transactions = [];
-  props.transactions.forEach(transaction => {
-    if (transaction.ticker == props.ticker) transactions.push(transaction);
-  })
   return (
     <div id="TickerInfoModal" className="modal" style={activeStyle}>
       <div className="modal-background"></div>
@@ -107,8 +138,8 @@ function TickerInfoModal(props) {
               type="line"
             />
           </div>
-          <div className="block has-text-weight-bold is-size-4">{props.ticker}</div>
-          <div className="block">{tickerDetails}</div>
+          <h5 className="has-text-weight-bold is-size-5">{props.ticker}</h5>
+          <div className="block is-size-7">{tickerDetails}</div>
           <TransactionTable
             transactions={transactions}
             filteredTransactions={[]}
